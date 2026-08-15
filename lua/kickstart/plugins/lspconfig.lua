@@ -137,28 +137,6 @@ local servers = {
     },
   },
 
-  -- Python: ruff for linting/diagnostics/code actions, basedpyright for type checking
-  -- NOTE: Astral's `ty` type checker is not yet available in Mason; switch to it when it is.
-  ruff = {
-    init_options = {
-      settings = {
-        lint = {
-          select = { 'E', 'F', 'I' },
-        },
-      },
-    },
-  },
-  basedpyright = {
-    settings = {
-      basedpyright = {
-        analysis = {
-          typeCheckingMode = 'standard',
-          autoImportCompletions = true,
-        },
-      },
-    },
-  },
-
   -- Rust: rust-analyzer (usually installed via rustup; Mason can install it as a fallback)
   rust_analyzer = {
     settings = {

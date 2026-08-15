@@ -103,20 +103,7 @@ vim.api.nvim_create_autocmd('LspAttach', {
 --  See `:help lsp-config` for information about keys and how to configure
 ---@type table<string, vim.lsp.Config>
 local servers = {
-  -- clangd = {},
-  -- gopls = {},
-  -- pyright = {},
-  -- rust_analyzer = {},
-  --
-  -- Some languages (like typescript) have entire language plugins that can be useful:
-  --    https://github.com/pmizio/typescript-tools.nvim
-  --
-  -- But for many setups, the LSP (`ts_ls`) will work just fine
-  -- ts_ls = {},
-
-  stylua = {}, -- Used to format Lua code
-
-  -- Special Lua Config, as recommended by neovim help docs
+  -- Lua
   lua_ls = {
     on_init = function(client)
       client.server_capabilities.documentFormattingProvider = false -- Disable formatting (formatting is done by stylua)
@@ -149,6 +136,51 @@ local servers = {
       },
     },
   },
+
+  -- Python: ruff for linting/diagnostics/code actions, basedpyright for type checking
+  -- NOTE: Astral's `ty` type checker is not yet available in Mason; switch to it when it is.
+  ruff = {
+    init_options = {
+      settings = {
+        lint = {
+          select = { 'E', 'F', 'I' },
+        },
+      },
+    },
+  },
+  basedpyright = {
+    settings = {
+      basedpyright = {
+        analysis = {
+          typeCheckingMode = 'standard',
+          autoImportCompletions = true,
+        },
+      },
+    },
+  },
+
+  -- Rust: rust-analyzer (usually installed via rustup; Mason can install it as a fallback)
+  rust_analyzer = {
+    settings = {
+      ['rust-analyzer'] = {
+        check = {
+          command = 'clippy',
+        },
+      },
+    },
+  },
+
+  -- Markdown
+  marksman = {},
+
+  -- JSON
+  jsonls = {},
+
+  -- YAML
+  yamlls = {},
+
+  -- TOML
+  taplo = {},
 }
 
 vim.pack.add {

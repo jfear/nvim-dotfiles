@@ -357,3 +357,11 @@ asdf reshim neovim
 </details>
 
 </details>
+
+## Plugins to Try
+
+Plugins we are considering adding to the configuration.
+
+### Rust Development
+
+- [`mrcjkb/rustaceanvim`](https://github.com/mrcjkb/rustaceanvim) — A Rust-specific enhancement layer for `rust-analyzer`. Provides extra IDE-like features such as `:RustLsp testables`, `:RustLsp expandMacro`, `:RustLsp parentModule`, `:RustLsp openCargo`, and built-in debugging helpers. Optional; Neovim's native LSP already handles completion, goto-definition, and diagnostics well.

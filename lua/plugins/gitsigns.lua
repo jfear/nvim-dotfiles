@@ -1,19 +1,42 @@
-local function gh(repo)
-	return "https://github.com/" .. repo
+vim.pack.add({ "https://github.com/lewis6991/gitsigns.nvim" })
+
+local current_base = nil
+
+local function toggle_diff_base()
+	local gitsigns = require("gitsigns")
+	if current_base then
+		gitsigns.reset_base({ global = true })
+		current_base = nil
+		vim.notify("Gitsigns: diff against index", vim.log.levels.INFO)
+	else
+		local cwd = vim.fn.expand("%:p:h")
+		local candidates = { "main", "master" }
+		local target = nil
+		for _, branch in ipairs(candidates) do
+			local result = vim.system({ "git", "rev-parse", "--verify", branch }, { cwd = cwd }):wait()
+			if result.code == 0 then
+				target = branch
+				break
+			end
+		end
+		if not target then
+			vim.notify("Gitsigns: no main/master branch found", vim.log.levels.WARN)
+			return
+		end
+		current_base = target
+		gitsigns.change_base(target, { global = true })
+		vim.notify("Gitsigns: diff against " .. target, vim.log.levels.INFO)
+	end
 end
 
--- Here is a more advanced configuration example that passes options to `gitsigns.nvim`
---
--- See `:help gitsigns` to understand what each configuration key does.
--- Adds git related signs to the gutter, as well as utilities for managing changes
-vim.pack.add({ gh("lewis6991/gitsigns.nvim") })
 require("gitsigns").setup({
 	signs = {
-		add = { text = "+" }, ---@diagnostic disable-line: missing-fields
-		change = { text = "~" }, ---@diagnostic disable-line: missing-fields
-		delete = { text = "_" }, ---@diagnostic disable-line: missing-fields
-		topdelete = { text = "‾" }, ---@diagnostic disable-line: missing-fields
-		changedelete = { text = "~" }, ---@diagnostic disable-line: missing-fields
+		add = { text = "▎" },
+		change = { text = "▎" },
+		delete = { text = "󰐊" },
+		topdelete = { text = "󰐊" },
+		changedelete = { text = "▎" },
+		untracked = { text = "▎" },
 	},
 	on_attach = function(bufnr)
 		local gitsigns = require("gitsigns")
@@ -42,14 +65,12 @@ require("gitsigns").setup({
 		end, { desc = "Jump to previous git [c]hange" })
 
 		-- Actions
-		-- visual mode
 		map("v", "<leader>hs", function()
 			gitsigns.stage_hunk({ vim.fn.line("."), vim.fn.line("v") })
 		end, { desc = "git [s]tage hunk" })
 		map("v", "<leader>hr", function()
 			gitsigns.reset_hunk({ vim.fn.line("."), vim.fn.line("v") })
 		end, { desc = "git [r]eset hunk" })
-		-- normal mode
 		map("n", "<leader>hs", gitsigns.stage_hunk, { desc = "git [s]tage hunk" })
 		map("n", "<leader>hr", gitsigns.reset_hunk, { desc = "git [r]eset hunk" })
 		map("n", "<leader>hS", gitsigns.stage_buffer, { desc = "git [S]tage buffer" })
@@ -65,15 +86,24 @@ require("gitsigns").setup({
 		end, { desc = "git [D]iff against last commit" })
 		map("n", "<leader>hQ", function()
 			gitsigns.setqflist("all")
-		end, { desc = "git hunk [Q]uickfix list (all files in repo)" })
-		map("n", "<leader>hq", gitsigns.setqflist, { desc = "git hunk [q]uickfix list (all changes in this file)" })
+		end, { desc = "git hunk [Q]uickfix list (all files)" })
+		map("n", "<leader>hq", gitsigns.setqflist, { desc = "git hunk [q]uickfix list (this file)" })
+
+		-- Telescope integration
+		map("n", "<leader>gs", function()
+			require("telescope.builtin").git_status()
+		end, { desc = "[G]it [S]tatus (telescope)" })
+		map("n", "<leader>sH", function()
+			gitsigns.setqflist("all")
+			require("telescope.builtin").quickfix()
+		end, { desc = "[S]earch [H]unks (all files)" })
+
 		-- Toggles
 		map("n", "<leader>tb", gitsigns.toggle_current_line_blame, { desc = "[T]oggle git show [b]lame line" })
 		map("n", "<leader>tw", gitsigns.toggle_word_diff, { desc = "[T]oggle git intra-line [w]ord diff" })
+		map("n", "<leader>tg", toggle_diff_base, { desc = "[T]oggle git diff base (main/master)" })
 
 		-- Text object
 		map({ "o", "x" }, "ih", gitsigns.select_hunk)
 	end,
 })
-
--- vim: ts=2 sts=2 sw=2 et

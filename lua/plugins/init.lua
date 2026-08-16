@@ -2,7 +2,6 @@
 
 require("kickstart.plugins.mini")
 require("kickstart.plugins.telescope")
-require("kickstart.plugins.blink-cmp")
 require("kickstart.plugins.treesitter")
 
 -- require 'kickstart.plugins.debug'

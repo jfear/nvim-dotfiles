@@ -2,8 +2,8 @@
 --  Treesitter-aware movement and selection for functions, classes, parameters, etc.
 --
 --  Movement:
---    ]m / [m  : Next/prev function start
---    ]M / [M  : Next/prev function end
+--    ]f / [f  : Next/prev function start
+--    ]F / [F  : Next/prev function end
 --    ]c / [c  : Next/prev class start
 --    ]C / [C  : Next/prev class end
 --    ]a / [a  : Next/prev parameter/argument start
@@ -21,22 +21,22 @@ require("nvim-treesitter-textobjects").setup({
 		enable = true,
 		set_jumps = true,
 		goto_next_start = {
-			["]m"] = "@function.outer",
+			["]f"] = "@function.outer",
 			["]c"] = "@class.outer",
 			["]a"] = "@parameter.inner",
 		},
 		goto_next_end = {
-			["]M"] = "@function.outer",
+			["]F"] = "@function.outer",
 			["]C"] = "@class.outer",
 			["]A"] = "@parameter.inner",
 		},
 		goto_previous_start = {
-			["[m"] = "@function.outer",
+			["[f"] = "@function.outer",
 			["[c"] = "@class.outer",
 			["[a"] = "@parameter.inner",
 		},
 		goto_previous_end = {
-			["[M"] = "@function.outer",
+			["[F"] = "@function.outer",
 			["[C"] = "@class.outer",
 			["[A"] = "@parameter.inner",
 		},

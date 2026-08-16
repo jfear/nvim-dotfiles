@@ -142,6 +142,7 @@ require("mini.splitjoin").setup()
 -- 'undo' target is disabled to avoid remapping 'u' and '<C-R>'
 require("mini.bracketed").setup({
 	undo = { suffix = "" },
+	file = { suffix = "" },
 })
 
 -- Delete/wipe buffer while preserving window layout

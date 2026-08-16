@@ -5,6 +5,9 @@
 --  See `:help hlsearch`
 vim.keymap.set("n", "<Esc>", "<cmd>nohlsearch<CR>")
 
+-- Toggle search highlight
+vim.keymap.set("n", "<leader>H", "<cmd>set hlsearch!<CR>", { desc = "Toggle search [H]ighlight" })
+
 -- Diagnostic Config & Keymaps
 --  See `:help vim.diagnostic.Opts`
 vim.diagnostic.config({

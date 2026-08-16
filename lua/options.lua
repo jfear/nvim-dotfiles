@@ -40,6 +40,13 @@ vim.o.undofile = true
 vim.o.ignorecase = true
 vim.o.smartcase = true
 
+-- Smart comment formatting:
+--   q: gq formats comments      r: insert comment leader on <Enter>
+--   n: numbered lists           1: don't break after 1-letter word
+--   c: autoformat comments      o: insert leader after 'o'/'O'
+--   j: remove comment leader when joining lines
+vim.opt.formatoptions = "qrn1coj"
+
 -- Keep signcolumn on by default
 vim.o.signcolumn = 'yes'
 

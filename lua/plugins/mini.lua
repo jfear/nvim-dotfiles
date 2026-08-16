@@ -13,13 +13,7 @@ if vim.g.have_nerd_font then
 	MiniIcons.mock_nvim_web_devicons()
 end
 
--- Styled notification UI with history
---
--- Replaces plain vim.notify popups; use `:Notifications` to browse history
-require("mini.notify").setup()
-
--- Route all vim.notify through mini.notify
-vim.notify = require("mini.notify").make_notify()
+-- mini.notify is disabled — too noisy with LSP diagnostics
 
 -- ============================================================================
 -- Text Editing

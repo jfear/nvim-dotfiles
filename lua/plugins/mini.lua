@@ -2,10 +2,14 @@
 --  A collection of various small independent plugins/modules
 vim.pack.add({ "https://github.com/nvim-mini/mini.nvim" })
 
--- If a nerd font is available, load the icons module for pretty icons in various plugins.
+-- ============================================================================
+-- UI & Integration
+-- ============================================================================
+
+-- Icons (requires Nerd Font)
 if vim.g.have_nerd_font then
 	require("mini.icons").setup()
-	-- Used for backwards compatibility with plugins that require `nvim-web-devicons` (e.g. telescope.nvim)
+	-- Backwards compatibility for plugins that expect nvim-web-devicons
 	MiniIcons.mock_nvim_web_devicons()
 end
 
@@ -17,6 +21,10 @@ require("mini.notify").setup()
 -- Route all vim.notify through mini.notify
 vim.notify = require("mini.notify").make_notify()
 
+-- ============================================================================
+-- Text Editing
+-- ============================================================================
+
 -- Better Around/Inside textobjects
 --
 -- Examples:
@@ -24,7 +32,7 @@ vim.notify = require("mini.notify").make_notify()
 --  - yiiq - [Y]ank [I]nside [I]+1 [Q]uote
 --  - ci'  - [C]hange [I]nside [']quote
 require("mini.ai").setup({
-	-- NOTE: Avoid conflicts with the built-in incremental selection mappings on Neovim>=0.12 (see `:help treesitter-incremental-selection`)
+	-- NOTE: Avoid conflicts with built-in incremental selection on Neovim>=0.12
 	mappings = {
 		around_next = "aa",
 		inside_next = "ii",
@@ -41,7 +49,7 @@ require("mini.align").setup()
 --
 -- - saiw) - [S]urround [A]dd [I]nner [W]ord [)]Paren
 -- - sd'   - [S]urround [D]elete [']quotes
--- - sr)'  - [S]urround [R]eplace [)] [']
+-- - sr)'  - [S]urround [R]eplace [)] ['']
 require("mini.surround").setup()
 
 -- Move lines and selections with Alt + hjkl
@@ -57,9 +65,9 @@ require("mini.move").setup()
 -- Treesitter-aware: skips closing a pair when there's already a matching one ahead
 require("mini.pairs").setup()
 
--- Highlight trailing whitespace
---
--- Auto-trim trailing whitespace on save
+-- Highlight and auto-trim trailing whitespace on save
+require("mini.trailspace").setup()
+
 vim.api.nvim_create_autocmd("BufWritePre", {
 	group = vim.api.nvim_create_augroup("user-trailspace", { clear = true }),
 	callback = function()
@@ -118,6 +126,10 @@ require("mini.operators").setup({
 -- - gJ  : [J]oin current expression into single line
 require("mini.splitjoin").setup()
 
+-- ============================================================================
+-- Navigation
+-- ============================================================================
+
 -- Square bracket navigation
 --
 -- ]b / [b : Next/prev buffer          ]d / [d : Next/prev diagnostic
@@ -155,7 +167,7 @@ require("mini.files").setup()
 
 local minifiles = require("mini.files")
 
--- Toggle dotfiles visibility
+-- Toggle dotfiles visibility in the explorer
 local show_dotfiles = true
 local filter_show = function(_)
 	return true
@@ -169,7 +181,7 @@ local toggle_dotfiles = function()
 	minifiles.refresh({ content = { filter = new_filter } })
 end
 
--- Toggle file preview
+-- Toggle file preview panel
 local show_preview = false
 local toggle_preview = function()
 	show_preview = not show_preview
@@ -186,6 +198,7 @@ vim.api.nvim_create_autocmd("User", {
 	end,
 })
 
+-- Toggle the file explorer for the current buffer's directory
 local function toggle_explorer()
 	for _, win in ipairs(vim.api.nvim_tabpage_list_wins(0)) do
 		if vim.bo[vim.api.nvim_win_get_buf(win)].filetype == "minifiles" then
@@ -198,16 +211,15 @@ end
 
 vim.keymap.set("n", "<leader>e", toggle_explorer, { desc = "[E]xplorer (mini.files)" })
 
--- Simple and easy statusline.
---  You could remove this setup call if you don't like it,
---  and try some other statusline plugin
+-- ============================================================================
+-- Statusline
+-- ============================================================================
+
+-- Minimal statusline with optional Nerd Font icons
 local statusline = require("mini.statusline")
--- Set `use_icons` to true if you have a Nerd Font
 statusline.setup({ use_icons = vim.g.have_nerd_font })
 
--- You can configure sections in the statusline by overriding their
--- default behavior. For example, here we set the section for
--- cursor location to LINE:COLUMN
+-- Override location section to show LINE:COLUMN
 ---@diagnostic disable-next-line: duplicate-set-field
 statusline.section_location = function()
 	return "%2l:%-2v"

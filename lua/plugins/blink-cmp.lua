@@ -13,7 +13,7 @@ require('blink.cmp').setup {
     nerd_font_variant = 'mono',
   },
   completion = {
-    list = { selection = 'preselect' },
+    list = { selection = { preselect = true, auto_insert = false } },
     documentation = { auto_show = false, auto_show_delay_ms = 500 },
     trigger = {
       show_on_accept_on_trigger_character = true,

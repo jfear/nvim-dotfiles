@@ -4,25 +4,21 @@ vim.loader.enable()
 -- Set <space> as the leader key
 -- See `:help mapleader`
 --  NOTE: Must happen before plugins are loaded (otherwise wrong leader will be used)
-vim.g.mapleader = " "
-vim.g.maplocalleader = " "
+vim.g.mapleader = ' '
+vim.g.maplocalleader = ' '
 
 -- Set to true if you have a Nerd Font installed and selected in the terminal
-vim.g.have_nerd_font = false
+vim.g.have_nerd_font = true
 
 -- [[ Setting options ]]
 --  See `:help vim.o`
 -- NOTE: You can change these options as you wish!
 --  For more options, you can see `:help option-list`
-
--- Make line numbers default
 vim.o.number = true
--- You can also add relative line numbers, to help with jumping.
---  Experiment for yourself to see if you like it!
--- vim.o.relativenumber = true
+vim.o.relativenumber = true
 
 -- Enable mouse mode, can be useful for resizing splits for example!
-vim.o.mouse = "a"
+vim.o.mouse = 'a'
 
 -- Don't show the mode, since it's already in the status line
 vim.o.showmode = false
@@ -31,9 +27,7 @@ vim.o.showmode = false
 --  Schedule the setting after `UiEnter` because it can increase startup-time.
 --  Remove this option if you want your OS clipboard to remain independent.
 --  See `:help 'clipboard'`
-vim.schedule(function()
-	vim.o.clipboard = "unnamedplus"
-end)
+vim.schedule(function() vim.o.clipboard = 'unnamedplus' end)
 
 -- Enable break indent
 vim.o.breakindent = true
@@ -46,7 +40,7 @@ vim.o.ignorecase = true
 vim.o.smartcase = true
 
 -- Keep signcolumn on by default
-vim.o.signcolumn = "yes"
+vim.o.signcolumn = 'yes'
 
 -- Decrease update time
 vim.o.updatetime = 250
@@ -67,10 +61,10 @@ vim.o.splitbelow = true
 --   See `:help lua-options`
 --   and `:help lua-guide-options`
 vim.o.list = true
-vim.opt.listchars = { tab = "» ", trail = "·", nbsp = "␣" }
+vim.opt.listchars = { tab = '» ', trail = '·', nbsp = '␣' }
 
 -- Preview substitutions live, as you type!
-vim.o.inccommand = "split"
+vim.o.inccommand = 'split'
 
 -- Show which line your cursor is on
 vim.o.cursorline = true
@@ -89,5 +83,94 @@ vim.o.expandtab = true
 vim.o.shiftwidth = 4
 vim.o.tabstop = 4
 vim.o.softtabstop = 4
+
+-- ============================================================================
+-- [[ Additional options inspired by LazyVim ]]
+-- ============================================================================
+
+-- Control how the completion menu behaves.
+-- See `:help 'completeopt'`
+vim.o.completeopt = 'menu,menuone,noselect'
+
+-- Enable 24-bit RGB colors in the terminal (required for modern colorschemes).
+-- See `:help 'termguicolors'`
+vim.o.termguicolors = true
+
+-- Automatically write modified buffers before certain actions (e.g. `:make`).
+-- See `:help 'autowrite'`
+vim.o.autowrite = true
+
+-- Configure automatic formatting behavior when typing (e.g. comment wrapping).
+-- See `:help 'formatoptions'`
+vim.o.formatoptions = 'jcroqlnt'
+
+-- Use ripgrep for `:grep` with a vim-friendly output format.
+-- See `:help 'grepprg'` and `:help 'grepformat'`
+vim.o.grepprg = 'rg --vimgrep'
+vim.o.grepformat = '%f:%l:%c:%m'
+
+-- Command-line completion mode: complete longest common prefix first, then
+-- show full matches on subsequent presses.
+-- See `:help 'wildmode'`
+vim.o.wildmode = 'longest:full,full'
+
+-- Suppress certain verbose messages (written, intro screen, completion, etc.).
+-- See `:help 'shortmess'`
+vim.opt.shortmess:append { W = true, I = true, c = true, C = true }
+
+-- Automatically insert indents in a smart way based on the current language.
+-- See `:help 'smartindent'`
+vim.o.smartindent = true
+
+-- Round indentation to a multiple of 'shiftwidth' when shifting lines.
+-- See `:help 'shiftround'`
+vim.o.shiftround = true
+
+-- Allow the cursor to move past the end of a line in visual block mode.
+-- See `:help 'virtualedit'`
+vim.o.virtualedit = 'block'
+
+-- Disable soft line wrapping (lines will extend beyond the window width).
+-- See `:help 'wrap'`
+vim.o.wrap = false
+
+-- Hide certain markup characters (e.g. * / _ in markdown) when not on the line.
+-- See `:help 'conceallevel'`
+vim.o.conceallevel = 2
+
+-- Slight transparency for the popup menu and cap its height.
+-- See `:help 'pumblend'` and `:help 'pumheight'`
+vim.o.pumblend = 10
+vim.o.pumheight = 10
+
+-- Number of undo levels to keep (much deeper than the default).
+-- See `:help 'undolevels'`
+vim.o.undolevels = 10000
+
+-- Enable smooth scrolling (Neovim 0.10+).
+-- See `:help 'smoothscroll'`
+vim.o.smoothscroll = true
+
+-- Minimum number of screen columns to keep left/right of the cursor.
+-- See `:help 'sidescrolloff'`
+vim.o.sidescrolloff = 8
+
+-- Start with all folds open so they don't collapse by default.
+-- See `:help 'foldlevel'`, `:help 'foldmethod'`, and `:help 'foldtext'`
+vim.o.foldlevel = 99
+vim.o.foldmethod = 'indent'
+vim.o.foldtext = ''
+
+-- Minimum window width when splitting.
+-- See `:help 'winminwidth'`
+vim.o.winminwidth = 5
+
+-- Keep the screen as stable as possible when opening/closing splits.
+-- See `:help 'splitkeep'`
+vim.o.splitkeep = 'screen'
+
+-- Default language for spell checking.
+-- See `:help 'spelllang'`
+vim.o.spelllang = 'en'
 
 -- vim: ts=2 sts=2 sw=2 et

@@ -9,6 +9,14 @@ if vim.g.have_nerd_font then
 	MiniIcons.mock_nvim_web_devicons()
 end
 
+-- Styled notification UI with history
+--
+-- Replaces plain vim.notify popups; use `:Notifications` to browse history
+require("mini.notify").setup()
+
+-- Route all vim.notify through mini.notify
+vim.notify = require("mini.notify").make_notify()
+
 -- Better Around/Inside textobjects
 --
 -- Examples:
@@ -23,6 +31,11 @@ require("mini.ai").setup({
 	},
 	n_lines = 500,
 })
+
+-- Interactive text alignment
+--
+-- In visual mode: `ga` + target (e.g., `gaip=` aligns paragraph by `=`)
+require("mini.align").setup()
 
 -- Add/delete/replace surroundings (brackets, quotes, etc.)
 --
@@ -44,6 +57,45 @@ require("mini.move").setup()
 -- Treesitter-aware: skips closing a pair when there's already a matching one ahead
 require("mini.pairs").setup()
 
+-- Highlight trailing whitespace
+--
+-- Auto-trim trailing whitespace on save
+vim.api.nvim_create_autocmd("BufWritePre", {
+	group = vim.api.nvim_create_augroup("user-trailspace", { clear = true }),
+	callback = function()
+		require("mini.trailspace").trim()
+		require("mini.trailspace").trim_last_lines()
+	end,
+})
+
+-- Animated vertical line showing current indent scope
+require("mini.indentscope").setup({
+	symbol = "│",
+	options = { try_as_border = true },
+})
+
+-- Disable indentscope in certain filetypes
+vim.api.nvim_create_autocmd("FileType", {
+	group = vim.api.nvim_create_augroup("user-indentscope", { clear = true }),
+	pattern = {
+		"help",
+		"alpha",
+		"dashboard",
+		"neo-tree",
+		"Trouble",
+		"trouble",
+		"lazy",
+		"mason",
+		"notify",
+		"toggleterm",
+		"lazyterm",
+		"minifiles",
+	},
+	callback = function()
+		vim.b.miniindentscope_disable = true
+	end,
+})
+
 -- Text edit operators
 --
 -- - g=  : Evaluate text and replace with result
@@ -60,6 +112,12 @@ require("mini.operators").setup({
 	replace = { prefix = "cr" },
 })
 
+-- Split/join argument lists, arrays, etc.
+--
+-- - gS  : [S]plit current expression into multiple lines
+-- - gJ  : [J]oin current expression into single line
+require("mini.splitjoin").setup()
+
 -- Square bracket navigation
 --
 -- ]b / [b : Next/prev buffer          ]d / [d : Next/prev diagnostic
@@ -73,6 +131,20 @@ require("mini.operators").setup({
 require("mini.bracketed").setup({
 	undo = { suffix = "" },
 })
+
+-- Delete/wipe buffer while preserving window layout
+--
+-- Use `<leader>bd` to delete current buffer without closing its window
+require("mini.bufremove").setup()
+
+vim.keymap.set("n", "<leader>bd", function()
+	require("mini.bufremove").delete(0, false)
+end, { desc = "[B]uffer [D]elete (preserve window)" })
+
+-- Track and navigate frequently visited files
+--
+-- - ]v / [v : Next/prev visited file
+require("mini.visits").setup()
 
 -- File explorer with column-based navigation
 --

@@ -1,9 +1,7 @@
 -- Load plugin modules in order.
-require("kickstart.plugins.todo-comments")
+
 require("kickstart.plugins.mini")
 require("kickstart.plugins.telescope")
-require("kickstart.plugins.lspconfig")
-require("kickstart.plugins.conform")
 require("kickstart.plugins.blink-cmp")
 require("kickstart.plugins.treesitter")
 

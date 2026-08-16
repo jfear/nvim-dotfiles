@@ -1,5 +1,4 @@
 -- Load plugin modules in order.
-require("kickstart.plugins.which-key")
 require("kickstart.plugins.tokyonight")
 require("kickstart.plugins.todo-comments")
 require("kickstart.plugins.mini")

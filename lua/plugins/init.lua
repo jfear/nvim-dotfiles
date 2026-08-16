@@ -1,6 +1,5 @@
 -- Load plugin modules in order.
 
-require("kickstart.plugins.mini")
 
 -- require 'kickstart.plugins.debug'
 -- require 'kickstart.plugins.indent_line'

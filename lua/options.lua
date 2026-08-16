@@ -25,9 +25,10 @@ vim.o.showmode = false
 
 -- Sync clipboard between OS and Neovim.
 --  Schedule the setting after `UiEnter` because it can increase startup-time.
---  Remove this option if you want your OS clipboard to remain independent.
---  See `:help 'clipboard'`
-vim.schedule(function() vim.o.clipboard = 'unnamedplus' end)
+--  When connected over SSH, leave clipboard unset so OSC 52 can handle
+--  clipboard sync through the terminal emulator instead.
+--  See `:help 'clipboard'` and `:help clipboard-osc52`
+vim.schedule(function() vim.o.clipboard = vim.env.SSH_CONNECTION and '' or 'unnamedplus' end)
 
 -- Enable break indent
 vim.o.breakindent = true
